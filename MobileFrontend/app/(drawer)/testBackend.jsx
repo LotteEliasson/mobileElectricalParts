@@ -47,6 +47,7 @@ const TestBackend = () => {
           renderItem={({ item }) => (
             <View style={styles.item}>
               <Text style={{ color: 'red' }}>{item.username}</Text>
+              <Text style={{ color: 'red' }}>{item.userrole}</Text>
             </View>
           )}
         />

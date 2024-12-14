@@ -6,9 +6,8 @@ import { Link, router } from 'expo-router'
 import { images } from '../../constants'
 import FormField from '../../components/FormField'
 import CustomButton from '../../components/CustomButton'
-import { createUser } from '../../lib/appwrite'
 import { useGlobalContext } from '../../context/GlobalProvider'
-
+import { createUser } from '../../sevice/userService'
 
 const SingUp = () => {
 
@@ -18,19 +17,21 @@ const SingUp = () => {
     username: '',
     email: '',
     password: '',
+    company: '',
+    userrole: 'user'
     
   })
   const [isSubmitting, setisSubmitting]= useState(false);
 
   const submit = async () =>{
-    if(!form.username || !form.email || !form.password) {
+    if(!form.username || !form.email || !form.password || !form.company) {
       Alert.alert('Error', 'Please fill in all the fields')
     }
 
     setisSubmitting(true)
 
     try {
-      const result = await createUser(form.email, form.password, form.username)
+      const result = await createUser(form);
 
       // set global state....
       setUser(result)
@@ -40,14 +41,13 @@ const SingUp = () => {
       router.navigate('/home')
 
     } catch(error) {
-      Alert.alert('Error', error.message)
+      const errorMessage = error.response?.data?.message || error.message;
+      Alert.alert('Error', errorMessage);
     } 
     finally {
       setisSubmitting(false)
     }
 
-
-    
   }
 
   return (
@@ -83,6 +83,13 @@ const SingUp = () => {
             title='Password'
             value={form.password}
             handleChangeText={(e) => setForm({...form, password: e})}
+            otherStyles="mt-7"
+          />
+
+          <FormField 
+            title='Company'
+            value={form.company}
+            handleChangeText={(e) => setForm({...form, company: e})}
             otherStyles="mt-7"
           />
 
