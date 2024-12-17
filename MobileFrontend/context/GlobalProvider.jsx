@@ -1,21 +1,14 @@
-import { createContext, useContext, useState, useEffect} from 'react'
-import { getCurrentUser, getCurrentEngine } from '../lib/appwrite';
-import * as SecureStore from 'expo-secure-store'
-
-
-// createContext - creates a context object that share values (state or functions) globally
-// in the application without passing them through every level of the component tree (prop drilling).
-
-//useContext - React hook that allows a component to consume the values stored inside a 
-//context -> GlobalContext.
-
-//useGlobalContext - access the global context through useContext(GlobalContext)
+// src/context/GlobalProvider.js
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getCurrentUser } from '../sevice/userService';
+import { getCurrentEngine } from '../sevice/engineService';
+import * as SecureStore from 'expo-secure-store';
 
 const GlobalContext = createContext();
+
 export const useGlobalContext = () => useContext(GlobalContext);
 
 const GlobalProvider = ({ children }) => {
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [currentEngine, setCurrentEngine] = useState(null);
@@ -36,43 +29,54 @@ const GlobalProvider = ({ children }) => {
     }
   };
 
-
   useEffect(() => {
-    getCurrentUser()
-      .then((res) => {
-        if(res) {
-          setIsLoggedIn(true)
-          setUser(res)
-         
+    const fetchUserAndEngine = async () => {
+      try {
+        console.log('Attempting to fetch user...');
+        const token = await SecureStore.getItemAsync('token');
+        console.log('Token:', token);
+        if (token) {
+          const userData = await getCurrentUser();
+          if (userData) {
+            setUser(userData);
+            setIsLoggedIn(true);
+            console.log('User data fetched:', userData);
+          } else {
+            setUser(null);
+            setIsLoggedIn(false);
+            console.log('No user data found.');
+          }
         } else {
-          setIsLoggedIn(false)
-          setUser(null)
+          console.log('No token found.');
         }
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
-      getStoredEngineId();
+        await getStoredEngineId();
+      } catch (error) {
+        console.log('Error fetching user:', error);
+        setUser(null);
+        setIsLoggedIn(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserAndEngine();
   }, []);
 
   return (
     <GlobalContext.Provider
-    value={{
-      isLoggedIn,
-      setIsLoggedIn,
-      user,
-      setUser,
-      currentEngine,
-      setCurrentEngine,
-      isLoading
-    }}
+      value={{
+        isLoggedIn,
+        setIsLoggedIn,
+        user,
+        setUser,
+        currentEngine,
+        setCurrentEngine,
+        isLoading,
+      }}
     >
       {children}
     </GlobalContext.Provider>
-  )
-}
+  );
+};
 
 export default GlobalProvider;

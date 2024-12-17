@@ -9,7 +9,7 @@ import CustomButton from '../../components/CustomButton'
 import { useGlobalContext } from '../../context/GlobalProvider'
 import { createUser } from '../../sevice/userService'
 
-const SingUp = () => {
+const SignUp = () => {
 
   const {setUser, setIsLoggedIn} = useGlobalContext();
   
@@ -18,8 +18,7 @@ const SingUp = () => {
     email: '',
     password: '',
     company: '',
-    userrole: 'user'
-    
+    userrole: 'external'
   })
   const [isSubmitting, setisSubmitting]= useState(false);
 
@@ -115,4 +114,4 @@ const SingUp = () => {
   )
 }
 
-export default SingUp
+export default SignUp

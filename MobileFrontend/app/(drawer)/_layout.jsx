@@ -4,7 +4,7 @@ import { router, usePathname } from 'expo-router'
 import { Drawer } from 'expo-router/drawer'
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer'
 import { Feather, AntDesign, Ionicons, MaterialIcons, MaterialCommunityIcons, Fontisto } from '@expo/vector-icons';
-import { signOut } from '../../lib/appwrite'
+import { signOut } from '../../sevice/userService'
 import { useGlobalContext } from '../../context/GlobalProvider'
 import * as SecureStore from 'expo-secure-store'
 
@@ -22,10 +22,14 @@ const CustomDrawerContent = (props) => {
   },[pathname]);
 
   const logout = async () =>{
-    await signOut();
+    
     setUser(null)
     setIsLoggedIn(false)
     setCurrentEngine(null)
+
+    await SecureStore.deleteItemAsync('token');
+    console.log('Token removed from storage');
+
 
     await SecureStore.deleteItemAsync('engineId');
     console.log('Engine Id removed from storage');

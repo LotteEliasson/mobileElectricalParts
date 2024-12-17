@@ -6,22 +6,26 @@ import { Link, router } from 'expo-router'
 import { images } from '../../constants'
 import FormField from '../../components/FormField'
 import CustomButton from '../../components/CustomButton'
-import { getCurrentUser, signIn, getCurrentEngine } from '../../lib/appwrite'
+//import { getCurrentUser, signIn, getCurrentEngine } from '../../lib/appwrite'
+import { getCurrentUser, signIn } from '../../sevice/userService'
+import { getCurrentEngine } from '../../sevice/engineService'
 import { useGlobalContext } from '../../context/GlobalProvider'
 import * as SecureStore from 'expo-secure-store'
 
-const SingIn = () => {
+const SignIn = () => {
 
   const { setUser, setIsLoggedIn, setCurrentEngine } = useGlobalContext();
 
   const [form, setForm] = useState({
-    engineId: '',
     email: '',
-    password: ''
+    password: '',
+    engineId: ''
   })
+
   const [isSubmitting, setIsSubmitting]= useState(false);
 
   const saveEngineId = async (engineId) => {
+    console.log ("In sign In ",  engineId)
     try {
       await SecureStore.setItemAsync('engineId', engineId);
       console.log('Engine Id saved', engineId )
@@ -31,7 +35,7 @@ const SingIn = () => {
   }
 
   const submit = async () =>{
-    if(!form.engineId || !form.email || !form.password) {
+    if(!form.email || !form.password || !form.engineId) {
       Alert.alert('Error', 'Please fill in all the fields')
       return;
     }
@@ -39,13 +43,15 @@ const SingIn = () => {
     setIsSubmitting(true)
 
     try {
-      const { engineId } = await signIn(form.engineId, form.email, form.password)
-    
+      const { engineId } = await signIn(form.email, form.password, form.engineId)
+     
+
       const result = await getCurrentUser();
       setUser(result)
       setIsLoggedIn(true)
 
       await saveEngineId(engineId);
+      console.log("Engine no used to login", engineId)
 
       const engine = await getCurrentEngine(engineId);
       setCurrentEngine(engine);
@@ -74,12 +80,6 @@ const SingIn = () => {
           />
           <Text className="text-lg text-white  text-semibold mt-10 ml-2 font-psemibold">Log in to Electric Documentation</Text>
 
-          <FormField 
-            title='Engine Id'
-            value={form.engineId}
-            handleChangeText={(e) => setForm({...form, engineId: e})}
-            otherStyles="mt-5"
-          />
 
           <FormField 
             title='Email'
@@ -95,6 +95,13 @@ const SingIn = () => {
             title='Password'
             value={form.password}
             handleChangeText={(e) => setForm({...form, password: e})}
+            otherStyles="mt-5"
+          />
+
+          <FormField 
+            title='Engine ID'
+            value={form.engineId}
+            handleChangeText={(e) => setForm({...form, engineId: e})}
             otherStyles="mt-5"
           />
 
@@ -120,4 +127,4 @@ const SingIn = () => {
   )
 }
 
-export default SingIn
+export default SignIn

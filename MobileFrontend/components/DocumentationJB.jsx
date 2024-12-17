@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Animated, Image, Modal } from 'react-native';
-import { getJunctionBox} from '../lib/appwrite';
-import { images } from '../constants';
+
 
 
 const DocumentationJB = ({ posts }) => {

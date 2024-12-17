@@ -13,6 +13,7 @@ api.interceptors.request.use(
     try {
       const token = await SecureStore.getItemAsync('token');
       if (token) {
+        console.log('Token retrieved:', token);
         config.headers['Authorization'] = `Bearer ${token}`;
       }
     } catch (error) {
