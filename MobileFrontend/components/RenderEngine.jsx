@@ -1,6 +1,5 @@
 import { View, Text,FlatList } from 'react-native';
 import React, { useState, useEffect } from 'react';
-//import { getComponentsById, getSpecificShip } from '../lib/appwrite';
 import { getSpecificShip } from '../sevice/shipService'
 
 const EngineItem = ({ item }) => {

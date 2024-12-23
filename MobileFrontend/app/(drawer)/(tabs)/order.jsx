@@ -3,11 +3,10 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState, useEffect} from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useGlobalContext } from '../../../context/GlobalProvider'
-import { getComponents, getComponentsById } from '../../../lib/appwrite'
-import useAppwrite from '../../../lib/useAppwrite'
+import { getComponentById } from '../../../sevice/componentService'
+import { sendEmail } from '../../../sevice/orderService'
 import FormField from '../../../components/FormField'
 import CustomButton from '../../../components/CustomButton'
-import sendEmail from '../../../components/BackendService';
 import CustomDrawerIcon from '../../../components/CustomDrawerIcon'
 
 
@@ -16,10 +15,32 @@ const Order = () => {
   const router = useRouter();
   const {id} = params;
   const { user, currentEngine } = useGlobalContext();
-  const { data: componentPost, isLoading} = useAppwrite(getComponents, id);
+  const [component, setComponent] = useState(null);
   
-  console.log('Owner: ', currentEngine.owner.name)
-  const email = currentEngine.owner.email
+  const email = currentEngine.owner_email;
+
+  useEffect(() => {
+    const fetchComponent = async () => {
+      try {
+        const data = await getComponentById(id); // Fetch the component
+        setComponent(data); // Store component in state
+      } catch (err) {
+        console.error('Error fetching component:', err);
+        setError(err);
+      } 
+    };
+
+    if (id) {
+      fetchComponent();
+    }
+  }, [id]);
+    
+  
+  console.log("CurrentEngine in Order ", currentEngine)
+  console.log("USer I Order.jsx", user)
+  console.log("Component id passed in order.lsx", id)
+  //console.log('Owner: ', currentEngine.owner_name)
+  //const email = currentEngine.owner.email
 
   const [form, setForm] = useState({
     to: '',
@@ -34,26 +55,49 @@ const Order = () => {
   });
 
   useEffect(() => {
-    if (user?.$id && id && email && componentPost) {
+    if (user?.user_id && id && email && component) {
       setForm((prevForm) => ({
         ...prevForm,
-        users: user.$id,
+        users: user.user_id,
         username: user.username,
         userEmail: user.email,
         component_id: id,
-        componentName: componentPost.name,
-        componentDescription: componentPost.desription,
-        componentItemId: componentPost.Item_id,
+        componentName: component.component_name,
+        componentDescription: component.component_description,
+        componentItemId: component.item_id,
         to: email,
       }));
     }
-  }, [user, id, email, componentPost]);
+  }, [user, id, email, component]);
 
-  console.log ('ComponentPosts: ', componentPost.name, componentPost.desription)
-  
+  console.log("Form content in Order.jsx", form)
+ 
   const handleSendEmail = async () => {
-    const result = await sendEmail(form.to, form.users, form.message, form.component_id, form.username, form.userEmail, form.componentName, form.componentDescription, form.componentItemId);
+    const orderData = {
+      to: form.to,
+      users: form.users, 
+      message: form.message, 
+      component_id: form.component_id, 
+      username: form.username, 
+      userEmail: form.userEmail, 
+      componentName: form.componentName, 
+      componentDescription: form.componentDescription, 
+      componentItemId: form.componentItemId
+    }
 
+    try {
+      const result = await sendEmail(orderData); 
+      if (result.message === 'Email sent successfully!') {
+        console.log('Email sent successfully!');
+      } else {
+        console.log(`Error: ${result.message}`);
+      }
+      router.push('/home');
+    } catch (error) {
+      console.log('Error sending email:', error.message);
+    }
+   
+ 
    setForm({
     to: '',
     message: '',
@@ -76,6 +120,8 @@ const Order = () => {
   };
 
 
+
+
   return (
     <SafeAreaView className="bg-primary h-full">
       <View className="absolute top-0 left-0 right-0 z-10 bg-primary py-4 my-8">
@@ -88,26 +134,23 @@ const Order = () => {
           <Text>Order</Text>
 
           <Text className="text-white">Welcome {user?.username}</Text>
-          <Text className="text-white">User id {user?.$id}</Text>
-          <Text className="text-white">Owner Name {currentEngine.owner.name}</Text>
-          <Text className="text-white">Owner Email {currentEngine.owner.email}</Text>
+          <Text className="text-white">User id {user?.user_id}</Text>
+          <Text className="text-white">Owner Name {currentEngine.owner_name}</Text>
+          <Text className="text-white">Owner Email {currentEngine.owner_email}</Text>
 
-           {/* Display a loading spinner while data is being fetched */}
-           {isLoading ? (
-            <ActivityIndicator size="large" color="#ffffff" />
-             ) : componentPost ? (
-            // Only render this block when the component data is available
+          <View>
+            {component ? (
               <>
-                <Text className="text-white">Component ID: {componentPost.$id}</Text>
-                <Text className="text-white">Component Name: {componentPost.name}</Text>
-                <Text className="text-white">Component Description: {componentPost.desription}</Text>
+                <Text className="text-white">Component Name: {component.component_name}</Text>
+                <Text className="text-white">Component Description: {component.component_description}</Text>
+                <Text className="text-white">Component Item ID: {component.item_id}</Text>
               </>
             ) : (
-              <Text className="text-white">No component data found</Text>
+              <Text>No component found</Text>
             )}
+          </View>
 
-
-
+       
           <FormField 
             title='Message'
             value={form.message}
@@ -121,6 +164,7 @@ const Order = () => {
             containerStyle="mt-7"
             
           />
+
         </View>
       </ScrollView>
     </SafeAreaView>

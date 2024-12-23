@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Link, router } from 'expo-router'
 
-import { images } from '../../constants'
+import { images } from '../../constants/images'
 import FormField from '../../components/FormField'
 import CustomButton from '../../components/CustomButton'
 //import { getCurrentUser, signIn, getCurrentEngine } from '../../lib/appwrite'
@@ -27,7 +27,7 @@ const SignIn = () => {
   const saveEngineId = async (engineId) => {
     console.log ("In sign In ",  engineId)
     try {
-      await SecureStore.setItemAsync('engineId', engineId);
+      await SecureStore.setItemAsync('engineId', JSON.stringify(engineId));
       console.log('Engine Id saved', engineId )
     } catch (error) {
       console.log('Error saving Engine Id', error)

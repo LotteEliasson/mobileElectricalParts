@@ -1,10 +1,7 @@
 import { View, Text, FlatList, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-
 import { getAllEngines } from '../../../sevice/engineService'
-//import { getAllEngines, getSpecificEngine } from '../../../lib/appwrite'
-import useAppwrite from '../../../lib/useAppwrite'
 import { useGlobalContext } from '../../../context/GlobalProvider'
 import CustomDrawerIcon from '../../../components/CustomDrawerIcon'
 import RenderEngines from '../../../components/RenderEngine'

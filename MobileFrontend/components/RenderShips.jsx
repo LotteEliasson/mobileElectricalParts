@@ -10,11 +10,11 @@ const RenderShips = ({ posts }) => {
     return (
       <View>
         
-        <Text className="text-white mt-2 font-semibold">Name {item.name}</Text>
-        <Text className="text-white mt-2 font-semibold">Type {item.type}</Text>
-        <Text className="text-white mt-2 font-semibold">Description {item.description}</Text>
+        <Text className="text-white mt-2 font-semibold">Name {item.ship_name}</Text>
+        <Text className="text-white mt-2 font-semibold">Type {item.ship_type}</Text>
+        <Text className="text-white mt-2 font-semibold">Description {item.designspec}</Text>
         <Text className="text-white mt-2 font-semibold">IMO {item.imo_no}</Text>
-        <Text className="text-white mt-2 font-semibold">Owner {item.owner.name}</Text>
+        <Text className="text-white mt-2 font-semibold">Owner {item.owner_id}</Text>
       </View>
     )
   }

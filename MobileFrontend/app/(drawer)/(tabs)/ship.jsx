@@ -1,19 +1,56 @@
-import { View, Text, FlatList } from 'react-native'
-import React from 'react'
+import { View, Text, FlatList, ActivityIndicator } from 'react-native'
+import React, {useEffect, useState} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { getAllShips } from '../../../lib/appwrite'
-import useAppwrite from '../../../lib/useAppwrite'
+//import { getAllShips } from '../../../lib/appwrite'
+//import useAppwrite from '../../../lib/useAppwrite'
+import { getAllShips } from '../../../sevice/shipService'
 import { useGlobalContext } from '../../../context/GlobalProvider'
 import CustomDrawerIcon from '../../../components/CustomDrawerIcon'
 import RenderShips from '../../../components/RenderShips'
 
 
 const Vessels = () => {
-  const { data: shipsPosts} = useAppwrite(getAllShips);
+ // const { data: shipsPosts} = useAppwrite(getAllShips);
   
   const { user } = useGlobalContext();
-
+  const [shipsPosts, setShipsPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+    useEffect(() => {
+      const fetchShipsPosts = async () => {
+        try {
+          const data = await getAllShips();
+          setShipsPosts(data);
+        } catch (err) {
+          console.error('Error fetching ships:', err);
+          setError(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchShipsPosts();
+    }, []);
+  
+    if (loading) {
+      return (
+        <View>
+          <ActivityIndicator size="large" color="#0000ff" />
+          <Text>Loading...</Text>
+        </View>
+      );
+    }
+  
+    if (error) {
+      return (
+        <View>
+          <Text>Error loading engines: {error.message}</Text>
+        </View>
+      );
+    }
+  
   return (
     <SafeAreaView className="bg-primary h-full">
       <View className="absolute top-0 left-0 right-0 z-10 bg-primary py-4 my-8">

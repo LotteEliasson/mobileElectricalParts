@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { createQualityPost } from '../../../lib/appwrite'
-import useAppwrite from '../../../lib/useAppwrite'
 import { useGlobalContext } from '../../../context/GlobalProvider'
 import CustomDrawerIcon from '../../../components/CustomDrawerIcon'
 import FormField from '../../../components/FormField'

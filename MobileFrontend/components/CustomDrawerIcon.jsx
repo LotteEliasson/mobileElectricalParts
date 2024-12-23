@@ -2,7 +2,7 @@ import React, { useState, useRef} from 'react';
 import { View, TouchableOpacity, Text, Image, Animated, Modal } from 'react-native';
 import { AntDesign, Ionicons } from '@expo/vector-icons'; 
 import { useNavigation } from 'expo-router';
-import { images } from '../constants'
+import { images } from '../constants/images'
 import { useGlobalContext } from '../context/GlobalProvider'
 import CustomButton from '../components/CustomButton'
 import { useRouter } from 'expo-router'
