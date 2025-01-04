@@ -26,3 +26,14 @@ export const getComponentjuncBoxById = async (JunctionBoxId) => {
   }
 
 }
+
+export const getComponentByEngineId = async (engineId) => {
+  try {
+    const response = await api.get(`/components/engine/${engineId}`)
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching component', error);
+    throw error;
+  }
+
+}

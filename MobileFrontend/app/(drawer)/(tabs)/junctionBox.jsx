@@ -97,7 +97,8 @@ const JunctionBox = () => {
      
 //---- Open manual for Junction Box
       const handleOpenManual = async (junctionBoxId) => {
-        if (isProcessing) return; // Bloker gentagne handlinger
+        console.log("Open manual i junctionBox.js")
+        //if (isProcessing) return; // Block repeting handle, does work proberly!
         await downloadAndOpenManual(junctionBoxId, setIsProcessing);
       };
 
@@ -105,10 +106,12 @@ const JunctionBox = () => {
       const openModal = async (componentId) => {
         try {
           // Hent manualId for det valgte componentId
-          const manualId = await getManualIdByComponentId(componentId);
+          const manualData = await getManualIdByComponentId(componentId);
+          const manualId = manualData.manual_id;
           setSelectedComponent(componentId);
           setSelectedManual(manualId);
 
+          console.log("Selected Manual ID:", manualId);
           // Åbn modal
           setModalVisible(true);
 
@@ -172,7 +175,7 @@ const JunctionBox = () => {
                 </View>
                 <View>
                   <Text className="text-white mt-2 font-semibold">
-                    ID: {item.data.junction_box_id}
+                    Cabinet Id: {item.data.junction_box_id}
                   </Text>
                   <Text className="text-white mt-2 font-semibold">
                     Type: {item.data.junction_box_type}
@@ -200,12 +203,12 @@ const JunctionBox = () => {
               <TouchableOpacity 
               onPress={() => openModal(item.data.component_id)}
               className="bg-secondary rounded-md min-h-[62px] justify-center border border-white my-2 p-4">
-                <Text className="text-black">Maker: {item.data.component_id}</Text>
+                <Text className="text-black">Component Id: {item.data.component_id}</Text>
                 <Text className="text-black font-semibold">Component: {item.data.component_name}</Text>
                 <Text className="text-black">Description: {item.data.component_description}</Text>
                 <Text className="text-black">Type: {item.data.item_id}</Text>
-                <Text className="text-black">Maker: {item.data.component_type}</Text>
-                <Text className="text-black">Maker: {item.data.component_type}</Text>
+                <Text className="text-black">Component Type: {item.data.component_type}</Text>
+                <Text className="text-black">Maker: {item.data.maker}</Text>
               </TouchableOpacity>
             );
           }

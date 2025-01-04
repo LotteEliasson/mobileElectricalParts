@@ -100,25 +100,6 @@ const CustomDrawerContent = (props) => {
         }}
       />
 
-<DrawerItem 
-        icon ={({ color, size }) => (
-          <Ionicons
-            name="document-text-outline"
-            size={size}
-            color={color}
-          />
-        )}
-        label={"Test"}
-        labelStyle={[
-          className="",
-          {color: pathname == '/testBackend' ? '#0747de' : '#000'}
-        ]}
-        className=""
-        onPress={() => {
-          router.push('/testBackend')
-        }}
-      />
-      
 
       <DrawerItem 
         icon ={({ color, size }) => (
@@ -209,7 +190,6 @@ const DrawerLayout = () => {
     >
       <Drawer.Screen name="(tabs)" options={{ headerShown: false }} />
       <Drawer.Screen name="accessForm" options={{ headerShown: false }} />
-      <Drawer.Screen name="testBackend" options={{ headerShown: false }} />
            
     </Drawer>
   

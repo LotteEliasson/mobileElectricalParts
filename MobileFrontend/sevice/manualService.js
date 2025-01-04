@@ -15,8 +15,14 @@ export const getAllmanuals = async () => {
   }
 }
 
-export const getManualByShipId = async (shipId) => {
-  
+export const getManualById = async (manualId) => {
+  try {
+    const response = await api.get(`/manuals/${manualId}`)
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching manuals', error);
+    throw error;
+  } 
 }
 
 
@@ -33,9 +39,12 @@ export const getManualIdByComponentId = async (componentId) => {
 
 export const downloadAndOpenManual = async (junctionBoxId, setIsProcessing) => {
   try {
-
+    console.log("get here?")
     setIsProcessing(true);
-    const fileUrl = `http://192.168.1.83:5000/api/manuals/jb/${junctionBoxId}/file`;
+    //wifi
+    //const fileUrl = `http://192.168.1.83:5000/api/manuals/jb/${junctionBoxId}/file`;
+    //Mobil
+    const fileUrl = `http://192.168.106.194:5000/api/manuals/jb/${junctionBoxId}/file`;
     console.log('Starting download and open from URL:', fileUrl);
 
     // Download PDF-data som en buffer

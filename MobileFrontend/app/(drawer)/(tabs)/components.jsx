@@ -6,7 +6,6 @@ import { getComponents, getComponentPosts, getComponentsById } from '../../../li
 import useAppwrite from '../../../lib/useAppwrite'
 import { useGlobalContext } from '../../../context/GlobalProvider'
 import CustomDrawerIcon from '../../../components/CustomDrawerIcon'
-
 import RenderComponents from '../../../components/RenderComponents'
 
 
@@ -17,13 +16,11 @@ const Components = () => {
  
   const [componentids, setComponentIds] = useState([]);
   
-
   useEffect(() => {
     if (currentEngine?.components) {
-      // Extract and store component IDs in state
       const ids = currentEngine.components.map(component => component.$id);
       setComponentIds(ids);
-      console.log("Fetched Component IDs:", ids); // Log the fetched component IDs for verification
+      console.log("Fetched Component IDs:", ids); 
     }
   }, [currentEngine]);
 
