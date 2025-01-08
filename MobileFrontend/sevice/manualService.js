@@ -42,9 +42,11 @@ export const downloadAndOpenManual = async (junctionBoxId, setIsProcessing) => {
     console.log("get here?")
     setIsProcessing(true);
     //wifi
-    //const fileUrl = `http://192.168.1.83:5000/api/manuals/jb/${junctionBoxId}/file`;
+    const fileUrl = `http://192.168.1.83:5000/api/manuals/jb/${junctionBoxId}/file`;
     //Mobil
-    const fileUrl = `http://192.168.106.194:5000/api/manuals/jb/${junctionBoxId}/file`;
+    //const fileUrl = `http://192.168.106.194:5000/api/manuals/jb/${junctionBoxId}/file`;
+    //Azure
+    //const fileUrl = `https://electricparts-h8a0e7cec9d8fjb3.northeurope-01.azurewebsites.net/api/manuals/jb/${junctionBoxId}/file`;
     console.log('Starting download and open from URL:', fileUrl);
 
     // Download PDF-data som en buffer

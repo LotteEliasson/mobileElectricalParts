@@ -1,6 +1,6 @@
 import { View, Text, FlatList, Image, TouchableOpacity, Animated, Modal } from 'react-native'
 import React, { useState, useRef } from 'react'
-import { getSpecificShip } from '../lib/appwrite';
+//import { getSpecificShip } from '../lib/appwrite';
 import useAppwrite from '../lib/useAppwrite';
 import { images } from '../constants';
 
@@ -9,7 +9,7 @@ import { images } from '../constants';
 const RenderPictures = ({ posts }) => {
 
   const id = '66e452d30038c66787cc';
-  const {data: shipPost} = useAppwrite(getSpecificShip, id);
+  //const {data: shipPost} = useAppwrite(getSpecificShip, id);
   const [modalVisible, setModalVisible] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null);
   const scaleValue = useRef(new Animated.Value(0)).current;
@@ -50,8 +50,8 @@ const RenderPictures = ({ posts }) => {
         <View>
           
           <Text className="text-white mt-2 font-semibold">Name: {item.description}</Text>
-          <Text className="text-white mt-2 font-semibold">Ship: {shipPost.name}</Text>
-          <Text className="text-white mt-2 font-semibold">IMO No: {shipPost.imo_no}</Text>
+          //<Text className="text-white mt-2 font-semibold">Ship: {shipPost.name}</Text>
+          //<Text className="text-white mt-2 font-semibold">IMO No: {shipPost.imo_no}</Text>
 
         </View>
 
