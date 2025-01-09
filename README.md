@@ -98,10 +98,10 @@ cd mobileElectricalParts/MobileFrontend
 npm install  
 
 ### API til lokal wifi ip-adresse
-**MobileFrontend/service/api.js skift:** 
+**MobileFrontend/service/api.js skift:**
 //wifi
 const API_URL = 'http://192.168.1.83:5000/api';
-til egen ip-adresse: http://xxx.xxx.x.xx:5000/api
+Til egen ip-adresse: http://xxx.xxx.x.xx:5000/api
 https://github.com/LotteEliasson/mobileElectricalParts/blob/main/MobileFrontend/sevice/api.js
 
 ### Start mobilapplikationen:  
