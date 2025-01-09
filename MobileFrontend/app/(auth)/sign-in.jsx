@@ -84,8 +84,7 @@ const SignIn = () => {
           <FormField 
             title='Email'
             value={form.email}
-            // håndtere et event e til at modificere email, Callbackfunktion der acceptere event, 
-            // den kalder setForm setter, hvor den destrukturer form values og sætter email lig e(event).
+          
             handleChangeText={(e) => setForm({...form, email: e})}
             otherStyles="mt-7"
             keyboardType="email-address"
